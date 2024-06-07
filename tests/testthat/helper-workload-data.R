@@ -39,10 +39,10 @@ example_instructors <- tribble(
 # Workload for Tara Trutch
 example_workload <- tribble(
   ~instructor,      ~expected_workload, ~observed_workload, ~obs_exp_diff,  ~gini_coef,
-  "Bob Smith",      15,                 3.65,               -11.35,         ineq(c(1, 0, 2.25), type = "Gini"),
-  "Sarah Appsley",  15,                 2.15,               -12.85,         ineq(c(0.5, 0, 1.5), type = "Gini"),
-  "George Monker",  15,                 11.25,              -6.75,          ineq(c(1.5, 3, 2.25), type = "Gini"),
-  "Tara Trutch",    15,                 6.75,               -3.75,          ineq(c(0, 3, 0.75), type = "Gini")
+  "Bob Smith",      15,                 4.75,               -10.25,         ineq(c(1), type = "Gini"),
+  "Sarah Appsley",  15,                 3.5,                -11.5,          ineq(c(0.5), type = "Gini"),
+  "George Monker",  15,                 11.25,              -3.75,          ineq(c(1.5, 3), type = "Gini"),
+  "Tara Trutch",    15,                 6.75,               -8.25,          ineq(c(3), type = "Gini")
 )
 
 

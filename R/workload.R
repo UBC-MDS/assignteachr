@@ -17,34 +17,26 @@
 #'
 #' @examples
 #' # code to generate example data sets here
-#' calculate_workload(2023_mds_courses, 2023-24_sections, 2023-24_instructors)
+#' calculate_workload(mds_courses, mds_sections, mds_instructors)
 calculate_workload <- function(courses, sections, instructors) {
-  # join courses and sections
   left_join(sections, courses) |>
+    group_by(instructor, session) |>
+    summarise(credits = sum(credits)) |>
     group_by(instructor) |>
-    summarise(credits = sum(credits),
-              gini_coef = ineq((credits), type = "Gini")) |>
+    summarise(gini_coef = ineq(credits),
+              credits = sum(credits)) |>
     left_join(instructors, by = join_by(instructor == name)) |>
-  mutate(observed_workload = credits +
-           workload_credits*prop_other_work +
-           workload_credits*prop_el +
-           capstone_groups * 0.75,
-         obs_exp_diff = observed_workload - workload_credits) |>
+    mutate(observed_workload = credits +
+             workload_credits*prop_other_work +
+             workload_credits*prop_el +
+             capstone_groups * 0.75,
+           obs_exp_diff = observed_workload - workload_credits) |>
     select(instructor,
            workload_credits,
            observed_workload,
            obs_exp_diff,
            gini_coef)
-  # group_by instructor, and session, sum credits for each session
-  # group by instructor and sum credits and gini index for each instructor
-  # join instructor and summarized session data for each instructor
-  # calculate observed_workload, obs_exp_diff
-  # drop all columns except: instructor, expected_workload, observed_workload, obs_exp_diff, gini_coef
 }
-
-test <- calculate_workload(example_courses,
-                   example_sections,
-                   example_instructors)
 
 #' View Instructor workload
 #'
