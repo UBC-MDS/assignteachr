@@ -12,17 +12,41 @@
 #' prop_el, prop_other_work, and optional capstone_groups
 #'
 #' @return a data frame with instructor workload each row is an instructor
-#' with columns
+#' with columns instructor, observed_workload, obs_exp_diff
 #' @export
 #'
 #' @examples
 #' # code to generate example data sets here
 #' calculate_workload(2023_mds_courses, 2023-24_sections, 2023-24_instructors)
 calculate_workload <- function(courses, sections, instructors) {
-  # returns a data frame with instructor workload
+  # join courses and sections
+  left_join(sections, courses) |>
+    group_by(instructor) |>
+    summarise(credits = sum(credits),
+              gini_coef = ineq((credits), type = "Gini")) |>
+    left_join(instructors, by = join_by(instructor == name)) |>
+  mutate(observed_workload = credits +
+           workload_credits*prop_other_work +
+           workload_credits*prop_el +
+           capstone_groups * 0.75,
+         obs_exp_diff = observed_workload - workload_credits) |>
+    select(instructor,
+           workload_credits,
+           observed_workload,
+           obs_exp_diff,
+           gini_coef)
+  # group_by instructor, and session, sum credits for each session
+  # group by instructor and sum credits and gini index for each instructor
+  # join instructor and summarized session data for each instructor
+  # calculate observed_workload, obs_exp_diff
+  # drop all columns except: instructor, expected_workload, observed_workload, obs_exp_diff, gini_coef
 }
 
-#' View Insructor workload
+test <- calculate_workload(example_courses,
+                   example_sections,
+                   example_instructors)
+
+#' View Instructor workload
 #'
 #' @param workload a dataframe returned from calculate_workload
 #'
