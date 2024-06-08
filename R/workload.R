@@ -12,39 +12,58 @@
 #' prop_el, prop_other_work, and optional capstone_groups
 #'
 #' @return a data frame with instructor workload each row is an instructor
-#' with columns instructor, observed_workload, obs_exp_diff
+#' with columns instructor, observed_workload, obs_exp_diff, and a column
+#' for each session (with the number of credits for that instructor
+#' for each session)
 #' @export
 #'
 #' @examples
 #' # code to generate example data sets here
 #' calculate_workload(mds_courses, mds_sections, mds_instructors)
-calculate_workload <- function(courses, sections, instructors) {
-  left_join(sections, courses) |>
-    group_by(instructor, session) |>
-    summarise(credits = sum(credits)) |>
-    group_by(instructor) |>
-    summarise(gini_coef = ineq(credits),
-              credits = sum(credits)) |>
-    left_join(instructors, by = join_by(instructor == name)) |>
-    mutate(observed_workload = credits +
+calculate_workload <- function(courses,
+                               sections,
+                               instructors) {
+  workload <- dplyr::left_join(sections, courses) |>
+    dplyr::group_by(instructor, session) |>
+    dplyr::summarise(credits = sum(credits, na.rm = TRUE)) |>
+    dplyr::add_count(session) |>
+    tidyr::pivot_wider(names_from = session, values_from = n) |>
+    dplyr::group_by(instructor) |>
+    dplyr::summarize(dplyr::across(dplyr::where(is.numeric), ~ sum(.x, na.rm = TRUE))) |>
+    dplyr::left_join(instructors, by = dplyr::join_by(instructor == name)) |>
+    dplyr::mutate(observed_workload = credits +
              workload_credits*prop_other_work +
-             workload_credits*prop_el +
-             capstone_groups * 0.75,
-           obs_exp_diff = observed_workload - workload_credits) |>
-    select(instructor,
-           workload_credits,
-           observed_workload,
-           obs_exp_diff,
-           gini_coef)
+             workload_credits*prop_el)
+
+  if ("capstone_groups" %in% colnames(workload)) {
+    if (!"S" %in% colnames(workload)) {
+      workload <- workload |>
+        dplyr::mutate(S = 0)
+    }
+    workload <- workload |>
+      dplyr::mutate(observed_workload = observed_workload +
+                      capstone_groups * 0.75,
+             S = S + capstone_groups * 0.75)
+  }
+
+  workload |>
+    dplyr::mutate(obs_exp_diff = observed_workload - workload_credits) |>
+    dplyr::select(-credits,
+           -position,
+           -dplyr::starts_with("prop"),
+           -capstone_groups) |>
+    dplyr::relocate(dplyr::any_of(c("workload_credits",
+                      "observed_workload", "obs_exp_diff")),
+                    .after = instructor)
 }
 
 #' View Instructor workload
 #'
 #' @param workload a dataframe returned from calculate_workload
 #'
-#' @return a grob (ggplot2 object) that is a stacked bar chart
-#' with a bar for each instructor and their workload proportions
-#' mapped to colour
+#' @return a grob (ggplot2 object) that is a bar chart
+#' with a bar for each instructor with the height being mapped to workload
+#' And a doughnut plot for teaching for each session being mapped to a colour.
 #'
 #' @export
 #'

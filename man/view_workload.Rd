@@ -10,9 +10,9 @@ view_workload(workload)
 \item{workload}{a dataframe returned from calculate_workload}
 }
 \value{
-a grob (ggplot2 object) that is a stacked bar chart
-with a bar for each instructor and their workload proportions
-mapped to colour
+a grob (ggplot2 object) that is a bar chart
+with a bar for each instructor with the height being mapped to workload
+And a doughnut plot for teaching for each session being mapped to a colour.
 }
 \description{
 View Instructor workload
