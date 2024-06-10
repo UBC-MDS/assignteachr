@@ -80,7 +80,10 @@ view_workload <- function(workload) {
   ggplot2::ggplot(workload, ggplot2::aes(y = instructor,
                                          x = observed_workload)) +
     ggplot2::geom_bar(stat = "identity", fill = "azure4") +
-    ggplot2::geom_vline(ggplot2::aes(xintercept = workload_credits), colour = "violetred") +
+    ggplot2::geom_errorbar(ggplot2::aes(xmin=workload_credits,
+                                        xmax=workload_credits),
+                           width=.95,
+                           colour = "violetred")+
     ggplot2::theme_classic() +
     ggplot2::labs(x = "Observed workload",
                   y = "Instructor")
