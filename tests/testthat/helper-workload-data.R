@@ -37,11 +37,11 @@ example_instructors <- tribble(
 # Workload for George Monker
 # Workload for Tara Trutch
 example_workload <- tribble(
-  ~instructor,      ~expected_workload, ~observed_workload, ~obs_exp_diff,  ~W1, ~W2, ~S,
-  "Bob Smith",      15,                 4.75,               -10.25,         1,   0,   2.25,
-  "George Monker",  15,                 12,                 -3,             1,   1,   2.25,
-  "Sarah Appsley",  15,                 3.75,               -11.25,         1,   0,   1.5,
-  "Tara Trutch",    15,                 6.75,               -8.25,          0,   1,   0.75
+  ~instructor,      ~expected_workload, ~observed_workload, ~obs_exp_diff,  ~W1,  ~W2,  ~S,
+  "Bob Smith",      15,                 4.75,               -10.25,         1,    0,    2.25,
+  "George Monker",  15,                 12,                 -3,             1.5,  3.75, 2.25,
+  "Sarah Appsley",  15,                 3.75,               -11.25,         0.75, 0,    1.5,
+  "Tara Trutch",    15,                 6.75,               -8.25,          0,    3,    0.75
 )
 
 

@@ -31,8 +31,11 @@ calculate_workload <- function(courses,
                   credits = credits + first_time_multiplier_credits + redevelopment_multiplier_credits) |>
     dplyr::group_by(instructor, session) |>
     dplyr::summarise(credits = sum(credits, na.rm = TRUE)) |>
-    dplyr::add_count(session) |>
-    tidyr::pivot_wider(names_from = session, values_from = n) |>
+    dplyr::mutate(session_credits = credits) |>
+    dplyr::group_by(instructor) |>
+    dplyr::mutate(credits = sum(credits)) |>
+    dplyr::ungroup() |>
+    tidyr::pivot_wider(names_from = session, values_from = session_credits) |>
     dplyr::group_by(instructor) |>
     dplyr::summarize(dplyr::across(dplyr::where(is.numeric), ~ sum(.x, na.rm = TRUE))) |>
     dplyr::left_join(instructors, by = dplyr::join_by(instructor == name)) |>
