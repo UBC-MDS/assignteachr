@@ -74,8 +74,8 @@ view_workload <- function(workload) {
   # returns a grob visualizing instructor workload
   ggplot2::ggplot(workload, ggplot2::aes(y = instructor,
                                          x = observed_workload)) +
-    ggplot2::geom_bar(stat = "identity") +
-    ggplot2::geom_vline(ggplot2::aes(xintercept = workload_credits)) +
+    ggplot2::geom_bar(stat = "identity", fill = "azure4") +
+    ggplot2::geom_vline(ggplot2::aes(xintercept = workload_credits), colour = "violetred") +
     ggplot2::theme_classic() +
     ggplot2::labs(x = "Observed workload",
                   y = "Instructor")
