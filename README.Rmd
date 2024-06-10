@@ -90,13 +90,13 @@ mds_workload
 View the workload for each instructor as a bar chart, 
 as well as their expected workload:
 
-```{r, fig.height=3}
+```{r, fig.height=2, fig.retina=2}
 view_workload(mds_workload)
 ```
 
 View the balance of each instructor's teaching credits across semesters:
 
-```{r}
+```{r, fig.retina=2}
 view_teaching_balance(mds_workload)
 ```
 
