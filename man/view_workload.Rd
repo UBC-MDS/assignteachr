@@ -19,5 +19,5 @@ View Instructor workload
 }
 \examples{
 # code to generate example workload dataframe here
-view_workload(2023_mds_workload)
+# view_workload(2023_mds_workload)
 }
