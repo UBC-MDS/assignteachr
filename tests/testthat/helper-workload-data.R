@@ -1,5 +1,4 @@
 library(dplyr)
-library(ineq)
 
 # Example input data ------------------------------------------------------
 example_courses <- tribble(

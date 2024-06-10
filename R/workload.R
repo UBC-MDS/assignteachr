@@ -97,29 +97,29 @@ view_workload <- function(workload) {
 view_teaching_balance <- function(workload) {
   # returns a grob visualizing instructor teaching credits across the semester
   donut_workload <- workload |>
-    pivot_longer(cols = 5:ncol(workload),
+    tidyr::pivot_longer(cols = 5:ncol(workload),
                  names_to = "session",
                  values_to = "teaching_credits") |>
-    group_by(instructor) |>
-    mutate(teaching_fraction = teaching_credits/sum(teaching_credits),
+    dplyr::group_by(instructor) |>
+    dplyr::mutate(teaching_fraction = teaching_credits / sum(teaching_credits),
            teaching_ymax = cumsum(teaching_fraction),
-           teaching_ymin = c(0, head(teaching_ymax, n=-1)),
-           label_position = (teaching_ymax +teaching_ymin) / 2,
+           teaching_ymin = c(0, head(teaching_ymax, n = -1)),
+           label_position = (teaching_ymax + teaching_ymin) / 2,
            label = paste0(session, "\n value: ", teaching_credits))
 
   donut_workload |>
-    ggplot(aes(ymax = teaching_ymax,
+    ggplot2::ggplot(aes(ymax = teaching_ymax,
                ymin = teaching_ymin,
                xmax = 4,
                xmin = 3,
                fill = session)) +
-    geom_rect() +
-    #geom_label(x = 3.5, aes(y = label_position, label = label), size = 2) +
-    scale_fill_brewer(palette = 3) +
-    scale_color_brewer(palette = 3) +
-    facet_wrap(~ instructor, ncol = 1) +
-    coord_polar(theta = "y") +
-    xlim(c(2, 4)) +
-    theme_void() #+
+    ggplot2::geom_rect() +
+    #ggplot2::geom_label(x = 3.5, ggplot2::aes(y = label_position, label = label), size = 2) +
+    ggplot2::scale_fill_brewer(palette = 3) +
+    ggplot2::scale_color_brewer(palette = 3) +
+    ggplot2::facet_wrap(~ instructor, ncol = 1) +
+    ggplot2::coord_polar(theta = "y") +
+    ggplot2::xlim(c(2, 4)) +
+    ggplot2::theme_void() #+
     #theme(legend.position = "none")
 }

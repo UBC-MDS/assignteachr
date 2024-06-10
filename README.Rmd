@@ -30,3 +30,73 @@ You can install the development version of assignteachr from [GitHub](https://gi
 # install.packages("devtools")
 devtools::install_github("UBC-MDS/assignteachr")
 ```
+
+## Example usage
+
+Load the `assignteachr` package, 
+and any other packages you need (e.g., `tidyverse`):
+
+```{r}
+library(assignteachr)
+library(tidyverse)
+```
+
+Load your course data:
+
+```{r, eval=FALSE}
+mds_courses <- read_csv("data/mds_courses.csv")
+mds_courses
+```
+
+```{r, echo=FALSE}
+source("tests/testthat/helper-workload-data.R")
+mds_courses <- example_courses
+mds_courses
+```
+
+Load your section data:
+
+```{r, eval=FALSE}
+mds_sections <- read_csv("data/mds_sections.csv")
+mds_sections
+```
+
+```{r, echo=FALSE}
+mds_sections <- example_sections
+mds_sections
+```
+
+Load your instructor data:
+
+```{r, eval=FALSE}
+mds_instructors <- read_csv("data/mds_instructors.csv")
+mds_instructors
+```
+
+```{r, echo=FALSE}
+mds_instructors <- example_instructors
+mds_instructors
+```
+
+Calculate the workload for each instructor:
+
+```{r}
+mds_workload <- calculate_workload(mds_courses,
+                                   mds_sections,
+                                   mds_instructors)
+mds_workload
+```
+
+View the workload for each instructor as a bar chart, 
+as well as their expected workload:
+
+```{r, fig.height=3}
+view_workload(mds_workload)
+```
+
+View the balance of each instructor's teaching credits across semesters:
+
+```{r}
+view_teaching_balance(mds_workload)
+```
+
