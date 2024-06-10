@@ -24,6 +24,11 @@ calculate_workload <- function(courses,
                                sections,
                                instructors) {
   workload <- dplyr::left_join(sections, courses) |>
+    dplyr::mutate(first_time_multiplier_credits = case_when(first_time_multiplier != 0 ~ credits * first_time_multiplier,
+                               TRUE ~ 0),
+                  redevelopment_multiplier_credits = case_when(redevelopment_multiplier != 0 ~ credits * redevelopment_multiplier,
+                                      TRUE ~ 0),
+                  credits = credits + first_time_multiplier_credits + redevelopment_multiplier_credits) |>
     dplyr::group_by(instructor, session) |>
     dplyr::summarise(credits = sum(credits, na.rm = TRUE)) |>
     dplyr::add_count(session) |>
@@ -94,7 +99,7 @@ view_workload <- function(workload) {
 #' @examples
 #' # code to generate example workload dataframe here
 #' # view_teaching_balance(2023_mds_workload)
-view_teaching_balance <- function(workload) {
+view_teaching_balance <- function(workload, facet_ncol = 1) {
   # returns a grob visualizing instructor teaching credits across the semester
   donut_workload <- workload |>
     tidyr::pivot_longer(cols = 5:ncol(workload),
@@ -117,7 +122,7 @@ view_teaching_balance <- function(workload) {
     #ggplot2::geom_label(x = 3.5, ggplot2::aes(y = label_position, label = label), size = 2) +
     ggplot2::scale_fill_brewer(palette = 3) +
     ggplot2::scale_color_brewer(palette = 3) +
-    ggplot2::facet_wrap(~ instructor, ncol = 1) +
+    ggplot2::facet_wrap(~ instructor, ncol = facet_ncol) +
     ggplot2::coord_polar(theta = "y") +
     ggplot2::xlim(c(2, 4)) +
     ggplot2::theme_void() #+

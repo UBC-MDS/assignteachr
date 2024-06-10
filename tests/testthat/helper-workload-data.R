@@ -12,12 +12,12 @@ example_sections <- tribble(
   ~course_code, ~course_number, ~section_number, ~enrollment, ~session, ~first_time_multiplier, ~redevelopment_multiplier, ~instructor,
   "DSCI",       511,            "001",           100,         "W1",       NA,                     NA,                        "Bob Smith",
   "DSCI",       511,            "L01",           100,         "W1",       NA,                     NA,                        "Bob Smith",
-  "DSCI",       511,            "L02",           100,         "W1",       NA,                     NA,                        "Sarah Appsley",
+  "DSCI",       511,            "L02",           100,         "W1",       0.5,                    NA,                        "Sarah Appsley",
   "DSCI",       521,            "001",           100,         "W1",       NA,                     NA,                        "George Monker",
   "DSCI",       521,            "L01",           100,         "W1",       NA,                     NA,                        "George Monker",
   "DSCI",       521,            "L02",           100,         "W1",       NA,                     NA,                        "George Monker",
   "DSCI",       100,            "001",           100,         "W2",       NA,                     NA,                        "Tara Trutch",
-  "DSCI",       100,            "002",           100,         "W2",       NA,                     NA,                        "George Monker"
+  "DSCI",       100,            "002",           100,         "W2",       NA,                     0.25,                      "George Monker"
 )
 
 #' @param instructors a data frame where each row is an instructor
@@ -39,8 +39,8 @@ example_instructors <- tribble(
 example_workload <- tribble(
   ~instructor,      ~expected_workload, ~observed_workload, ~obs_exp_diff,  ~W1, ~W2, ~S,
   "Bob Smith",      15,                 4.75,               -10.25,         1,   0,   2.25,
-  "George Monker",  15,                 11.25,              -3.75,          1,   1,   2.25,
-  "Sarah Appsley",  15,                 3.5,                -11.5,          1,   0,   1.5,
+  "George Monker",  15,                 12,                 -3,             1,   1,   2.25,
+  "Sarah Appsley",  15,                 3.75,               -11.25,         1,   0,   1.5,
   "Tara Trutch",    15,                 6.75,               -8.25,          0,   1,   0.75
 )
 
